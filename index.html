@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MVF Project Planning</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f7f7f5; color: #1a1a1a; font-size: 14px; line-height: 1.5; }
+  .page { max-width: 800px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
+  a { color: #185FA5; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .site-header { margin-bottom: 2.5rem; }
+  .site-header h1 { font-size: 20px; font-weight: 500; margin-bottom: 4px; }
+  .site-header p { font-size: 13px; color: #888; }
+
+  .project-card { background: #fff; border: 0.5px solid #e5e5e5; border-radius: 12px; padding: 1.25rem 1.5rem; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; transition: border-color .15s; }
+  .project-card:hover { border-color: #bbb; }
+  .project-left { flex: 1; }
+  .project-num { font-size: 11px; color: #aaa; margin-bottom: 2px; }
+  .project-name { font-size: 15px; font-weight: 500; margin-bottom: 4px; }
+  .project-desc { font-size: 12px; color: #888; }
+  .project-right { display: flex; align-items: center; gap: 12px; flex-shrink: 0; margin-left: 1.5rem; }
+  .project-meta { text-align: right; }
+  .project-delivery { font-size: 12px; color: #555; }
+  .project-delivery-label { font-size: 10px; color: #aaa; }
+  .status-pill { font-size: 11px; padding: 3px 10px; border-radius: 20px; font-weight: 500; }
+  .status-pill.active { background: #E6F1FB; color: #185FA5; }
+  .status-pill.planning { background: #f0f0ee; color: #666; border: 0.5px solid #e5e5e5; }
+  .chevron { color: #ccc; font-size: 18px; }
+
+  .section-label { font-size: 11px; font-weight: 500; color: #aaa; text-transform: uppercase; letter-spacing: .06em; margin: 1.5rem 0 .75rem; }
+
+  .footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 0.5px solid #e5e5e5; font-size: 12px; color: #aaa; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="site-header">
+    <h1>MVF Project Planning</h1>
+    <p>Active development projects · MyVeloFit</p>
+  </div>
+
+  <div class="section-label">Active</div>
+
+  <a href="151-fit-redesign/" style="display:block; color: inherit;">
+    <div class="project-card">
+      <div class="project-left">
+        <div class="project-num">Project 151</div>
+        <div class="project-name">Fit Feature Redesign</div>
+        <div class="project-desc">Fit flow UX · Camera capture · Upload · Processing · Dashboard · Fitting Page</div>
+      </div>
+      <div class="project-right">
+        <div class="project-meta">
+          <div class="project-delivery-label">Final delivery</div>
+          <div class="project-delivery">Aug 7, 2026</div>
+        </div>
+        <span class="status-pill active">In progress</span>
+        <span class="chevron">›</span>
+      </div>
+    </div>
+  </a>
+
+  <div class="section-label">Coming soon</div>
+
+  <div class="project-card" style="opacity:.5; cursor:default;">
+    <div class="project-left">
+      <div class="project-num">Project 155</div>
+      <div class="project-name">iOS App Development</div>
+      <div class="project-desc">Native iOS application</div>
+    </div>
+    <div class="project-right">
+      <span class="status-pill planning">Planning</span>
+    </div>
+  </div>
+
+  <div class="project-card" style="opacity:.5; cursor:default;">
+    <div class="project-left">
+      <div class="project-num">Project 152</div>
+      <div class="project-name">AI Fit Assistant</div>
+      <div class="project-desc">AI-powered fit recommendations</div>
+    </div>
+    <div class="project-right">
+      <span class="status-pill planning">Planning</span>
+    </div>
+  </div>
+
+  <div class="footer">MyVeloFit · Internal use only</div>
+
+</div>
+</body>
+</html>

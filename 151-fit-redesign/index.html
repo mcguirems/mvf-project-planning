@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>151 — Fit Feature Redesign · MVF Project Planning</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f7f7f5; color: #1a1a1a; font-size: 14px; line-height: 1.5; }
+  .page { max-width: 980px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+  a { color: #185FA5; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .breadcrumb { font-size: 12px; color: #888; margin-bottom: 1.5rem; }
+  .breadcrumb span { color: #1a1a1a; }
+
+  .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem; }
+  .header-left h1 { font-size: 22px; font-weight: 500; margin-bottom: 4px; }
+  .header-left p { font-size: 13px; color: #666; }
+  .header-right { font-size: 12px; color: #888; text-align: right; }
+
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 2rem; }
+  .stat { background: #fff; border: 0.5px solid #e5e5e5; border-radius: 10px; padding: 14px 16px; }
+  .stat-label { font-size: 11px; color: #888; margin-bottom: 4px; }
+  .stat-value { font-size: 22px; font-weight: 500; }
+  .stat.warning { background: #FAEEDA; border-color: #F5C4B3; }
+  .stat.warning .stat-label { color: #854F0B; }
+  .stat.warning .stat-value { color: #854F0B; }
+  .stat.info { background: #E6F1FB; border-color: #B5D4F4; }
+  .stat.info .stat-label { color: #185FA5; }
+  .stat.info .stat-value { color: #185FA5; }
+
+  .section-title { font-size: 13px; font-weight: 500; color: #888; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem; }
+
+  .gantt-section { background: #fff; border: 0.5px solid #e5e5e5; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; }
+  .gantt-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; }
+  .gantt-title { font-size: 14px; font-weight: 500; }
+  .legend { display: flex; gap: 14px; font-size: 12px; color: #666; flex-wrap: wrap; }
+  .legend-item { display: flex; align-items: center; gap: 5px; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 2px; }
+
+  .chart-container { position: relative; height: 320px; }
+
+  .milestone-section { background: #fff; border: 0.5px solid #e5e5e5; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; }
+  .month-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .month-col { border: 0.5px solid #e5e5e5; border-radius: 10px; overflow: hidden; }
+  .month-header { padding: 10px 14px; border-bottom: 0.5px solid #e5e5e5; }
+  .month-name { font-size: 13px; font-weight: 500; }
+  .month-sub { font-size: 11px; margin-top: 1px; opacity: .75; }
+  .month-header.june { background: #E6F1FB; color: #185FA5; }
+  .month-header.july { background: #f5f5f3; color: #444; }
+  .month-header.august { background: #EAF3DE; color: #3B6D11; }
+  .month-body { padding: 10px 14px; display: flex; flex-direction: column; gap: 10px; }
+  .milestone-item { display: flex; align-items: flex-start; gap: 8px; }
+  .milestone-date { width: 36px; flex-shrink: 0; font-size: 11px; color: #888; padding-top: 1px; }
+  .milestone-info { flex: 1; }
+  .milestone-name { font-size: 12px; font-weight: 500; }
+  .milestone-meta { display: flex; align-items: center; gap: 5px; margin-top: 3px; }
+  .badge { font-size: 10px; padding: 1px 6px; border-radius: 3px; }
+  .badge.at-risk { background: #FAEEDA; color: #854F0B; }
+  .badge.in-progress { background: #E6F1FB; color: #185FA5; }
+  .badge.upcoming { background: #f0f0ee; color: #666; border: 0.5px solid #e5e5e5; }
+  .badge.content { background: #f0f0ee; color: #666; border: 0.5px solid #e5e5e5; }
+  .badge.delivery { background: #EAF3DE; color: #3B6D11; }
+  .milestone-task { font-size: 10px; color: #999; }
+
+  .alert { display: flex; align-items: center; gap: 10px; background: #FCEBEB; border: 0.5px solid #F7C1C1; border-radius: 8px; padding: 10px 14px; font-size: 12px; color: #A32D2D; margin-top: 1.5rem; }
+
+  .footer { margin-top: 2.5rem; padding-top: 1.5rem; border-top: 0.5px solid #e5e5e5; display: flex; justify-content: space-between; font-size: 12px; color: #aaa; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="breadcrumb"><a href="../">MVF Project Planning</a> › <span>151 — Fit Feature Redesign</span></div>
+
+  <div class="header">
+    <div class="header-left">
+      <h1>151 — Fit Feature Redesign</h1>
+      <p>Fit flow UX redesign · Camera capture · Upload · Processing · Dashboard · Fitting Page</p>
+    </div>
+    <div class="header-right">
+      Updated: <span id="updated-date"></span><br>
+      <a href="https://app.asana.com/1/1204834634202873/project/1210098098262241" target="_blank">Open in Asana ↗</a>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-label">EPICs in scope</div>
+      <div class="stat-value">9</div>
+    </div>
+    <div class="stat warning">
+      <div class="stat-label">At risk</div>
+      <div class="stat-value">2</div>
+    </div>
+    <div class="stat info">
+      <div class="stat-label">In progress</div>
+      <div class="stat-value">2</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Final delivery</div>
+      <div class="stat-value">Aug 7</div>
+    </div>
+  </div>
+
+  <div class="gantt-section">
+    <div class="gantt-header">
+      <div class="gantt-title">Schedule — EPICs</div>
+      <div class="legend">
+        <div class="legend-item"><div class="legend-dot" style="background:#EF9F27"></div>At risk</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#378ADD"></div>In progress</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#C8C8C4"></div>Upcoming</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#639922"></div>Done</div>
+        <div class="legend-item"><div style="width:2px;height:10px;background:#E24B4A;"></div>Today</div>
+      </div>
+    </div>
+    <div class="chart-container">
+      <canvas id="gantt" role="img" aria-label="Gantt chart showing 9 tasks from May to August 2026"></canvas>
+    </div>
+  </div>
+
+  <div class="milestone-section">
+    <div class="gantt-header" style="margin-bottom:1rem;">
+      <div class="gantt-title">Milestones by month</div>
+    </div>
+    <div class="month-grid">
+      <div class="month-col">
+        <div class="month-header june">
+          <div class="month-name">June</div>
+          <div class="month-sub">Fit flow core</div>
+        </div>
+        <div class="month-body">
+          <div class="milestone-item"><div class="milestone-date">Jun 5</div><div class="milestone-info"><div class="milestone-name">New Fit Session</div><div class="milestone-meta"><span class="badge at-risk">At risk</span><span class="milestone-task">L · 151.2.1</span></div></div></div>
+          <div class="milestone-item"><div class="milestone-date">Jun 9</div><div class="milestone-info"><div class="milestone-name">Instructions Modal</div><div class="milestone-meta"><span class="badge at-risk">At risk</span><span class="milestone-task">M · 151.2.2</span></div></div></div>
+          <div class="milestone-item"><div class="milestone-date">Jun 16</div><div class="milestone-info"><div class="milestone-name">On-Bike Assessment</div><div class="milestone-meta"><span class="badge in-progress">In progress</span><span class="milestone-task">M · 151.2.3</span></div></div></div>
+          <div class="milestone-item"><div class="milestone-date">Jun 25</div><div class="milestone-info"><div class="milestone-name">Upload — File Select</div><div class="milestone-meta"><span class="badge in-progress">In progress</span><span class="milestone-task">L · 151.2.5</span></div></div></div>
+        </div>
+      </div>
+      <div class="month-col">
+        <div class="month-header july">
+          <div class="month-name">July</div>
+          <div class="month-sub">Upload · Processing · Content</div>
+        </div>
+        <div class="month-body">
+          <div class="milestone-item"><div class="milestone-date">Jul 14</div><div class="milestone-info"><div class="milestone-name">Upload — Camera</div><div class="milestone-meta"><span class="badge upcoming">Upcoming</span><span class="milestone-task">XL · 151.2.4</span></div></div></div>
+          <div class="milestone-item"><div class="milestone-date">Jul 17</div><div class="milestone-info"><div class="milestone-name">Blog & video content</div><div class="milestone-meta"><span class="badge content">Content dep.</span><span class="milestone-task">Marketing</span></div></div></div>
+          <div class="milestone-item"><div class="milestone-date">Jul 23</div><div class="milestone-info"><div class="milestone-name">Processing Results</div><div class="milestone-meta"><span class="badge upcoming">Upcoming</span><span class="milestone-task">L · 151.2.6</span></div></div></div>
+        </div>
+      </div>
+      <div class="month-col">
+        <div class="month-header august">
+          <div class="month-name">August</div>
+          <div class="month-sub">Dashboard & Fitting</div>
+        </div>
+        <div class="month-body">
+          <div class="milestone-item"><div class="milestone-date">Aug 3</div><div class="milestone-info"><div class="milestone-name">Fitting Page</div><div class="milestone-meta"><span class="badge upcoming">Upcoming</span><span class="milestone-task">M · 151.1.2</span></div></div></div>
+          <div class="milestone-item"><div class="milestone-date">Aug 7</div><div class="milestone-info"><div class="milestone-name">Dashboard</div><div class="milestone-meta"><span class="badge delivery">Final delivery</span><span class="milestone-task">M · 151.1.1</span></div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="alert">
+      ⚠ 2 tasks at risk — 151.2.1 due Jun 5 and 151.2.2 due Jun 9. Review required.
+    </div>
+  </div>
+
+  <div class="footer">
+    <span>MVF Project Planning · <a href="../">All projects</a></span>
+    <span>Data: <a href="https://app.asana.com/1/1204834634202873/project/1210098098262241" target="_blank">151 - Fit Feature Redesign in Asana</a></span>
+  </div>
+
+</div>
+
+<script>
+document.getElementById('updated-date').textContent = new Date().toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'});
+
+const TOTAL = 88;
+const TODAY_DAY = 15;
+const tasks = [
+  { label: '151.2.1 New Fit Session',     start: 0,  end: 17, status: 'at-risk' },
+  { label: '151.2.2 Instructions Modal',  start: 14, end: 21, status: 'at-risk' },
+  { label: '151.2.3 On-Bike Assessment',  start: 14, end: 28, status: 'in-progress' },
+  { label: '151.2.5 Upload File Select',  start: 14, end: 37, status: 'in-progress' },
+  { label: '151.2.4 Upload Camera',       start: 28, end: 56, status: 'upcoming' },
+  { label: 'Blog & video content',        start: 29, end: 59, status: 'upcoming' },
+  { label: '151.2.6 Processing Results',  start: 44, end: 65, status: 'upcoming' },
+  { label: '151.1.2 Fitting Page',        start: 63, end: 76, status: 'upcoming' },
+  { label: '151.1.1 Dashboard',           start: 66, end: 80, status: 'upcoming' },
+];
+const COLORS = { 'at-risk':'#EF9F27', 'in-progress':'#378ADD', 'upcoming':'#C8C8C4', 'done':'#639922' };
+const MONTHS = [{label:'May',day:0},{label:'Jun',day:13},{label:'Jul',day:43},{label:'Aug',day:74}];
+
+const todayPlugin = {
+  id: 'todayLine',
+  afterDraw(chart) {
+    const { ctx, chartArea: { top, bottom }, scales: { x } } = chart;
+    const xPos = x.getPixelForValue(TODAY_DAY);
+    ctx.save();
+    ctx.beginPath();
+    ctx.moveTo(xPos, top - 4);
+    ctx.lineTo(xPos, bottom);
+    ctx.strokeStyle = '#E24B4A';
+    ctx.lineWidth = 1.5;
+    ctx.setLineDash([4, 3]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = '#E24B4A';
+    ctx.font = '11px -apple-system, sans-serif';
+    ctx.fillText('today', xPos + 4, top + 2);
+    ctx.restore();
+  }
+};
+
+new Chart(document.getElementById('gantt'), {
+  type: 'bar',
+  plugins: [todayPlugin],
+  data: {
+    labels: tasks.map(t => t.label),
+    datasets: [{
+      data: tasks.map(t => [t.start, t.end]),
+      backgroundColor: tasks.map(t => COLORS[t.status]),
+      borderRadius: 4,
+      barPercentage: 0.55,
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label(ctx) {
+            const t = tasks[ctx.dataIndex];
+            const fmt = d => { const dt = new Date(new Date('2026-05-19').getTime() + d*86400000); return dt.toLocaleDateString('en-US',{month:'short',day:'numeric'}); };
+            return `${fmt(t.start)} → ${fmt(t.end)}`;
+          }
+        }
+      }
+    },
+    scales: {
+      x: {
+        min: 0, max: 88,
+        ticks: {
+          stepSize: 7,
+          callback(val) {
+            const match = [{day:0,label:'May 19'},{day:13,label:'Jun 1'},{day:20,label:'Jun 8'},{day:27,label:'Jun 15'},{day:34,label:'Jun 22'},{day:43,label:'Jul 1'},{day:50,label:'Jul 8'},{day:57,label:'Jul 15'},{day:64,label:'Jul 22'},{day:74,label:'Aug 1'},{day:81,label:'Aug 8'}];
+            const m = match.find(x => Math.abs(x.day - val) < 4);
+            return m ? m.label : '';
+          },
+          maxRotation: 40,
+          font: { size: 11 },
+          color: '#888',
+          autoSkip: false,
+        },
+        grid: { color: 'rgba(0,0,0,0.05)' }
+      },
+      y: {
+        ticks: { font: { size: 12 }, color: '#333' },
+        grid: { display: false }
+      }
+    }
+  }
+});
+</script>
+</body>
+</html>
